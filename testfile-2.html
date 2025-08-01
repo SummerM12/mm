@@ -1,0 +1,628 @@
+<!-- 訂單專案管理系統 - 單一HTML檔案版本 -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>訂單專案管理系統</title>
+  <!-- 載入 Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 載入 React 和 ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- 載入 Babel 轉換 JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* 設定字體為 Inter，並為 body 應用背景色和文字顏色 */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #111827; /* bg-gray-900 */
+      color: #D1D5DB; /* text-gray-100 */
+    }
+    /* 自定義 fade-in 動畫 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- 應用程式邏輯 -->
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // 主應用程式元件
+    const App = () => {
+      // 狀態管理：目前顯示的頁面
+      const [currentPage, setCurrentPage] = useState('supplier'); // 'supplier', 'customer', 'profit', 'sales'
+      // 狀態管理：供應商報價資料
+      const [supplierQuotes, setSupplierQuotes] = useState([]);
+      // 狀態管理：客戶報價單資料
+      const [customerQuotes, setCustomerQuotes] = useState([]);
+      // 狀態管理：銷貨項目資料 (從客戶報價單中選擇)
+      const [salesItems, setSalesItems] = useState([]);
+
+      // 渲染頁面導覽列
+      const renderNavBar = () => (
+        <div className="flex justify-center gap-4 p-4 bg-gray-800 rounded-b-xl shadow-lg">
+          <button
+            onClick={() => setCurrentPage('supplier')}
+            className={`px-4 py-2 font-bold text-white rounded-lg transition-colors duration-300 ${
+              currentPage === 'supplier' ? 'bg-indigo-600 shadow-md' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            供應商報價
+          </button>
+          <button
+            onClick={() => setCurrentPage('customer')}
+            className={`px-4 py-2 font-bold text-white rounded-lg transition-colors duration-300 ${
+              currentPage === 'customer' ? 'bg-indigo-600 shadow-md' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            客戶報價單
+          </button>
+          <button
+            onClick={() => setCurrentPage('profit')}
+            className={`px-4 py-2 font-bold text-white rounded-lg transition-colors duration-300 ${
+              currentPage === 'profit' ? 'bg-indigo-600 shadow-md' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            利潤分析
+          </button>
+          <button
+            onClick={() => setCurrentPage('sales')}
+            className={`px-4 py-2 font-bold text-white rounded-lg transition-colors duration-300 ${
+              currentPage === 'sales' ? 'bg-indigo-600 shadow-md' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+          >
+            銷貨項目
+          </button>
+        </div>
+      );
+
+      return (
+        <div className="min-h-screen bg-gray-900 text-gray-100 font-sans p-6">
+          <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 mb-6 drop-shadow-md">
+            訂單專案管理系統
+          </h1>
+          {renderNavBar()}
+
+          <main className="max-w-4xl mx-auto mt-8 p-6 bg-gray-800 rounded-2xl shadow-xl">
+            {currentPage === 'supplier' && (
+              <SupplierQuotePage
+                supplierQuotes={supplierQuotes}
+                setSupplierQuotes={setSupplierQuotes}
+              />
+            )}
+            {currentPage === 'customer' && (
+              <CustomerQuotePage
+                supplierQuotes={supplierQuotes}
+                customerQuotes={customerQuotes}
+                setCustomerQuotes={setCustomerQuotes}
+              />
+            )}
+            {currentPage === 'profit' && (
+              <ProfitAnalysisPage
+                supplierQuotes={supplierQuotes}
+                customerQuotes={customerQuotes}
+              />
+            )}
+            {currentPage === 'sales' && (
+              <SalesItemsPage
+                customerQuotes={customerQuotes}
+                salesItems={salesItems}
+                setSalesItems={setSalesItems}
+              />
+            )}
+          </main>
+        </div>
+      );
+    };
+
+    // ======================= 第一頁: 供應商報價 =======================
+    const SupplierQuotePage = ({ supplierQuotes, setSupplierQuotes }) => {
+      const [newItem, setNewItem] = useState({
+        supplierName: '',
+        item: '',
+        quantity: '', // 將數量初始值設為空字串
+        unitPrice: '', // 將單價初始值設為空字串
+        isTaxIncluded: false,
+        isShippingIncluded: false,
+        remarks: '', // 新增備註欄位
+      });
+
+      // 新增供應商報價品項
+      const handleAddItem = (e) => {
+        e.preventDefault();
+        // 將字串值轉換為數字進行驗證
+        const quantityValue = Number(newItem.quantity);
+        const unitPriceValue = Number(newItem.unitPrice);
+        
+        if (newItem.supplierName.trim() && newItem.item.trim() && quantityValue > 0 && unitPriceValue >= 0) {
+          setSupplierQuotes([...supplierQuotes, {
+            ...newItem,
+            quantity: quantityValue,
+            unitPrice: unitPriceValue,
+            id: Date.now()
+          }]);
+          setNewItem({
+            supplierName: '',
+            item: '',
+            quantity: '', // 新增後重設為空字串
+            unitPrice: '', // 新增後重設為空字串
+            isTaxIncluded: false,
+            isShippingIncluded: false,
+            remarks: '',
+          });
+        }
+      };
+
+      // 移除供應商報價品項
+      const handleRemoveItem = (id) => {
+        setSupplierQuotes(supplierQuotes.filter(item => item.id !== id));
+      };
+
+      // 下載供應商報價為 CSV 檔案
+      const handleDownloadCsv = () => {
+        // 定義 CSV 標頭
+        const headers = ['供應商名稱', '品項', '數量', '單價', '小計', '含稅', '含運', '備註'];
+        // 將資料轉換為 CSV 格式的字串
+        const csvRows = supplierQuotes.map(item => {
+          const subtotal = item.quantity * item.unitPrice;
+          const isTax = item.isTaxIncluded ? '是' : '否';
+          const isShipping = item.isShippingIncluded ? '是' : '否';
+          // 確保備註中的逗號不會破壞 CSV 格式，使用雙引號包住
+          const remarks = `"${item.remarks.replace(/"/g, '""')}"`;
+          return `${item.supplierName},${item.item},${item.quantity},${item.unitPrice},${subtotal},${isTax},${isShipping},${remarks}`;
+        });
+        // 合併標頭和資料
+        const csvContent = [
+          headers.join(','),
+          ...csvRows
+        ].join('\n');
+        
+        // 建立 Blob 物件以觸發下載
+        const blob = new Blob(['\ufeff', csvContent], { type: 'text/csv;charset=utf-8;' }); // 加上 \ufeff 以支援中文
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', '供應商報價.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      return (
+        <div className="animate-fade-in">
+          <h2 className="text-2xl font-bold mb-4 text-white">供應商報價</h2>
+          <form onSubmit={handleAddItem} className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gray-700 rounded-lg shadow-inner">
+            <input
+              type="text"
+              value={newItem.supplierName}
+              onChange={(e) => setNewItem({ ...newItem, supplierName: e.target.value })}
+              placeholder="供應商名稱"
+              className="p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+              type="text"
+              value={newItem.item}
+              onChange={(e) => setNewItem({ ...newItem, item: e.target.value })}
+              placeholder="品項"
+              className="p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+              type="number"
+              value={newItem.quantity}
+              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+              placeholder="數量"
+              min="0"
+              className="p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+              type="number"
+              value={newItem.unitPrice}
+              onChange={(e) => setNewItem({ ...newItem, unitPrice: e.target.value })}
+              placeholder="單價"
+              min="0"
+              className="p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+            />
+            <div className="col-span-full">
+              <textarea
+                value={newItem.remarks}
+                onChange={(e) => setNewItem({ ...newItem, remarks: e.target.value })}
+                placeholder="備註"
+                rows="2"
+                className="w-full p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 resize-none"
+              ></textarea>
+            </div>
+            <div className="flex items-center gap-4 col-span-full">
+              <label className="flex items-center text-white">
+                <input
+                  type="checkbox"
+                  checked={newItem.isTaxIncluded}
+                  onChange={(e) => setNewItem({ ...newItem, isTaxIncluded: e.target.checked })}
+                  className="form-checkbox h-5 w-5 text-indigo-600 bg-gray-700 border-gray-600 rounded"
+                />
+                <span className="ml-2">含稅</span>
+              </label>
+              <label className="flex items-center text-white">
+                <input
+                  type="checkbox"
+                  checked={newItem.isShippingIncluded}
+                  onChange={(e) => setNewItem({ ...newItem, isShippingIncluded: e.target.checked })}
+                  className="form-checkbox h-5 w-5 text-indigo-600 bg-gray-700 border-gray-600 rounded"
+                />
+                <span className="ml-2">含運</span>
+              </label>
+            </div>
+            <button
+              type="submit"
+              className="col-span-full py-2 px-4 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg transition-colors duration-300 shadow-md"
+            >
+              新增品項
+            </button>
+          </form>
+
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={handleDownloadCsv}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors duration-300 shadow-md"
+            >
+              下載 CSV
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-gray-700 rounded-lg shadow-lg">
+              <thead>
+                <tr className="bg-gray-600 text-white">
+                  <th className="px-4 py-2 text-left">供應商名稱</th>
+                  <th className="px-4 py-2 text-left">品項</th>
+                  <th className="px-4 py-2 text-left">數量</th>
+                  <th className="px-4 py-2 text-left">單價</th>
+                  <th className="px-4 py-2 text-left">小計</th>
+                  <th className="px-4 py-2 text-left">含稅</th>
+                  <th className="px-4 py-2 text-left">含運</th>
+                  <th className="px-4 py-2 text-left">備註</th>
+                  <th className="px-4 py-2 text-left">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {supplierQuotes.map((item) => (
+                  <tr key={item.id} className="bg-gray-800 border-b border-gray-700 text-gray-200">
+                    <td className="px-4 py-2">{item.supplierName}</td>
+                    <td className="px-4 py-2">{item.item}</td>
+                    <td className="px-4 py-2">{item.quantity}</td>
+                    <td className="px-4 py-2">${item.unitPrice}</td>
+                    <td className="px-4 py-2">${item.quantity * item.unitPrice}</td>
+                    <td className="px-4 py-2">{item.isTaxIncluded ? '是' : '否'}</td>
+                    <td className="px-4 py-2">{item.isShippingIncluded ? '是' : '否'}</td>
+                    <td className="px-4 py-2">{item.remarks}</td>
+                    <td className="px-4 py-2">
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="text-red-400 hover:text-red-500 font-bold"
+                      >
+                        刪除
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
+    // ======================= 第二頁: 客戶報價單 =======================
+    const CustomerQuotePage = ({ supplierQuotes, customerQuotes, setCustomerQuotes }) => {
+      const [selectedSupplierItem, setSelectedSupplierItem] = useState('');
+      const [customerUnitPrice, setCustomerUnitPrice] = useState(''); // 將單價初始值設為空字串
+      const [remarks, setRemarks] = useState(''); // 新增備註欄位
+
+      // 將選定的供應商品項加入客戶報價單
+      const handleAddItem = (e) => {
+        e.preventDefault();
+        const supplierItem = supplierQuotes.find(item => item.id === Number(selectedSupplierItem));
+        const customerUnitPriceValue = Number(customerUnitPrice); // 將字串值轉換為數字進行驗證
+        if (supplierItem && customerUnitPriceValue > 0) {
+          setCustomerQuotes([...customerQuotes, {
+            ...supplierItem,
+            customerUnitPrice: customerUnitPriceValue,
+            id: Date.now(),
+            remarks: remarks, // 包含備註
+          }]);
+          setSelectedSupplierItem('');
+          setCustomerUnitPrice(''); // 新增後重設為空字串
+          setRemarks('');
+        }
+      };
+
+      // 移除客戶報價單品項
+      const handleRemoveItem = (id) => {
+        setCustomerQuotes(customerQuotes.filter(item => item.id !== id));
+      };
+
+      // 下載客戶報價為 CSV 檔案
+      const handleDownloadCsv = () => {
+        // 定義 CSV 標頭
+        const headers = ['供應商名稱', '品項', '數量', '客戶單價', '小計', '備註'];
+        // 將資料轉換為 CSV 格式的字串
+        const csvRows = customerQuotes.map(item => {
+          const subtotal = item.quantity * item.customerUnitPrice;
+          const remarks = `"${item.remarks.replace(/"/g, '""')}"`;
+          return `${item.supplierName},${item.item},${item.quantity},${item.customerUnitPrice},${subtotal},${remarks}`;
+        });
+        // 合併標頭和資料
+        const csvContent = [
+          headers.join(','),
+          ...csvRows
+        ].join('\n');
+        
+        // 建立 Blob 物件以觸發下載
+        const blob = new Blob(['\ufeff', csvContent], { type: 'text/csv;charset=utf-8;' }); // 加上 \ufeff 以支援中文
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', '客戶報價單.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      return (
+        <div className="animate-fade-in">
+          <h2 className="text-2xl font-bold mb-4 text-white">客戶報價單</h2>
+          <form onSubmit={handleAddItem} className="mb-6 p-4 bg-gray-700 rounded-lg shadow-inner">
+            <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
+              <select
+                value={selectedSupplierItem}
+                onChange={(e) => setSelectedSupplierItem(e.target.value)}
+                className="flex-grow p-2 rounded-md bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">選擇供應商品項...</option>
+                {supplierQuotes.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.item} (供應商: {item.supplierName}, 數量: {item.quantity})
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                value={customerUnitPrice}
+                onChange={(e) => setCustomerUnitPrice(e.target.value)}
+                placeholder="客戶單價"
+                min="0"
+                className="w-full md:w-auto p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="mb-4">
+              <textarea
+                value={remarks}
+                onChange={(e) => setRemarks(e.target.value)}
+                placeholder="備註"
+                rows="2"
+                className="w-full p-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 resize-none"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-lg transition-colors duration-300 shadow-md"
+            >
+              加入報價單
+            </button>
+          </form>
+
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={handleDownloadCsv}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors duration-300 shadow-md"
+            >
+              下載 CSV
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-gray-700 rounded-lg shadow-lg">
+              <thead>
+                <tr className="bg-gray-600 text-white">
+                  <th className="px-4 py-2 text-left">供應商名稱</th>
+                  <th className="px-4 py-2 text-left">品項</th>
+                  <th className="px-4 py-2 text-left">數量</th>
+                  <th className="px-4 py-2 text-left">客戶單價</th>
+                  <th className="px-4 py-2 text-left">小計</th>
+                  <th className="px-4 py-2 text-left">備註</th>
+                  <th className="px-4 py-2 text-left">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customerQuotes.map((item) => (
+                  <tr key={item.id} className="bg-gray-800 border-b border-gray-700 text-gray-200">
+                    <td className="px-4 py-2">{item.supplierName}</td>
+                    <td className="px-4 py-2">{item.item}</td>
+                    <td className="px-4 py-2">{item.quantity}</td>
+                    <td className="px-4 py-2">${item.customerUnitPrice}</td>
+                    <td className="px-4 py-2">${item.quantity * item.customerUnitPrice}</td>
+                    <td className="px-4 py-2">{item.remarks}</td>
+                    <td className="px-4 py-2">
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="text-red-400 hover:text-red-500 font-bold"
+                      >
+                        刪除
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+
+    // ======================= 第三頁: 銷售利潤分析 =======================
+    const ProfitAnalysisPage = ({ supplierQuotes, customerQuotes }) => {
+      // 使用 useMemo 優化性能，只有當依賴的資料改變時才重新計算
+      const analysis = useMemo(() => {
+        let totalSupplierCost = 0;
+        let totalCustomerRevenue = 0;
+        
+        // 根據客戶報價單的內容來計算總成本和總收入
+        customerQuotes.forEach(customerItem => {
+            // 從客戶報價單中取得客戶收入
+            totalCustomerRevenue += customerItem.quantity * customerItem.customerUnitPrice;
+
+            // 每個客戶報價單項目都包含原始供應商的單價
+            totalSupplierCost += customerItem.quantity * customerItem.unitPrice;
+        });
+
+        // 計算利潤
+        const profit = totalCustomerRevenue - totalSupplierCost;
+
+        return {
+          totalSupplierCost,
+          totalCustomerRevenue,
+          profit,
+        };
+      }, [supplierQuotes, customerQuotes]); // 依賴於 supplierQuotes 和 customerQuotes
+
+      return (
+        <div className="animate-fade-in">
+          <h2 className="text-2xl font-bold mb-4 text-white">銷售利潤分析</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-6 bg-gray-700 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-300">總供應商成本</h3>
+              <p className="text-3xl font-extrabold text-red-400 mt-2">${analysis.totalSupplierCost}</p>
+              <p className="text-sm text-gray-400 mt-1">(來自客戶報價單中的項目)</p>
+            </div>
+            <div className="p-6 bg-gray-700 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-300">總客戶收入</h3>
+              <p className="text-3xl font-extrabold text-green-400 mt-2">${analysis.totalCustomerRevenue}</p>
+            </div>
+            <div className="p-6 bg-gray-700 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-300">預估利潤</h3>
+              <p className={`text-3xl font-extrabold mt-2 ${analysis.profit >= 0 ? 'text-blue-400' : 'text-red-400'}`}>
+                ${analysis.profit}
+              </p>
+            </div>
+          </div>
+          <p className="mt-6 text-sm text-gray-400">
+            * 注意：本系統目前未將稅與運費納入計算，您可以手動在單價中調整。
+          </p>
+        </div>
+      );
+    };
+
+    // ======================= 第四頁: 銷貨項目 =======================
+    const SalesItemsPage = ({ customerQuotes, salesItems, setSalesItems }) => {
+      // 處理單一項目選取/取消選取
+      const handleToggleItem = (item) => {
+        if (salesItems.some(i => i.id === item.id)) {
+          // 如果已存在，則移除
+          setSalesItems(salesItems.filter(i => i.id !== item.id));
+        } else {
+          // 如果不存在，則加入
+          setSalesItems([...salesItems, item]);
+        }
+      };
+
+      // 檢查項目是否被選取
+      const isItemSelected = (item) => {
+        return salesItems.some(i => i.id === item.id);
+      };
+
+      // 下載選取的銷貨項目為 CSV
+      const handleDownloadCsv = () => {
+        if (salesItems.length === 0) {
+          alert('請先選擇至少一個銷貨項目！');
+          return;
+        }
+
+        // 定義 CSV 標頭
+        const headers = ['供應商名稱', '品項', '數量', '客戶單價', '小計', '備註'];
+        // 將資料轉換為 CSV 格式的字串
+        const csvRows = salesItems.map(item => {
+          const subtotal = item.quantity * item.customerUnitPrice;
+          const remarks = `"${item.remarks.replace(/"/g, '""')}"`;
+          return `${item.supplierName},${item.item},${item.quantity},${item.customerUnitPrice},${subtotal},${remarks}`;
+        });
+        // 合併標頭和資料
+        const csvContent = [
+          headers.join(','),
+          ...csvRows
+        ].join('\n');
+
+        // 建立 Blob 物件以觸發下載
+        const blob = new Blob(['\ufeff', csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', '銷貨項目.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      return (
+        <div className="animate-fade-in">
+          <h2 className="text-2xl font-bold mb-4 text-white">銷貨項目</h2>
+          <p className="text-gray-400 mb-6">從客戶報價單中選擇已銷貨的項目，並下載成 CSV 檔案。</p>
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-white">已選取 {salesItems.length} 個項目</span>
+            <button
+              onClick={handleDownloadCsv}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors duration-300 shadow-md"
+            >
+              下載銷貨 CSV
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-gray-700 rounded-lg shadow-lg">
+              <thead>
+                <tr className="bg-gray-600 text-white">
+                  <th className="px-4 py-2 text-left">選擇</th>
+                  <th className="px-4 py-2 text-left">供應商名稱</th>
+                  <th className="px-4 py-2 text-left">品項</th>
+                  <th className="px-4 py-2 text-left">數量</th>
+                  <th className="px-4 py-2 text-left">客戶單價</th>
+                  <th className="px-4 py-2 text-left">備註</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customerQuotes.map((item) => (
+                  <tr key={item.id} className="bg-gray-800 border-b border-gray-700 text-gray-200">
+                    <td className="px-4 py-2">
+                      <input
+                        type="checkbox"
+                        checked={isItemSelected(item)}
+                        onChange={() => handleToggleItem(item)}
+                        className="form-checkbox h-5 w-5 text-indigo-600 bg-gray-700 border-gray-600 rounded"
+                      />
+                    </td>
+                    <td className="px-4 py-2">{item.supplierName}</td>
+                    <td className="px-4 py-2">{item.item}</td>
+                    <td className="px-4 py-2">{item.quantity}</td>
+                    <td className="px-4 py-2">${item.customerUnitPrice}</td>
+                    <td className="px-4 py-2">{item.remarks}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    };
+    
+    // 渲染應用程式到 id="root" 的 div
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
