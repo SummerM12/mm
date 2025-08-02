@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>林楊五金有限公司 | 專業船舶補給服務</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+        color: #1a1a1a;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+      }
+
+      .nav {
+        display: flex;
+        gap: 2rem;
+        font-size: 1rem;
+      }
+
+      .lang-btn {
+        border: 1px solid #ccc;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+      }
+
+      .hero {
+        background-image: url("https://github.com/mei19872211/antelope-sea-supplies/blob/main/src/assets/hero-shipping.jpg?raw=true");
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        color: white;
+        text-align: center;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 2rem;
+        border-radius: 12px;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero h2 {
+        font-size: 1.5rem;
+        color: #cce0ff;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background-color: #0070f3;
+        color: white;
+      }
+
+      .btn-line {
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        color: #333;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .hero h2 {
+          font-size: 1.2rem;
+        }
+      }
+
+      main {
+        padding-top: 90px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="https://lovable.dev/favicon-32x32.png" alt="logo" />
+        <div>
+          <div>林楊五金有限公司</div>
+          <small style="font-weight: normal;">Antelope Hardware Ltd.</small>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#">首頁</a>
+        <a href="#">服務項目</a>
+        <a href="#">關於我們</a>
+        <a href="#">聯絡我們</a>
+      </nav>
+      <div class="lang-btn">🌐 EN</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <h1>專業船舶補給服務</h1>
+          <h2>值得信賴的海上夥伴</h2>
+          <p>
+            我們擁有豐富的業界經驗，曾在高雄、基隆、台中等主要商港服務多艘船舶，提供專業可靠的船舶補給服務。
+          </p>
+          <div class="buttons">
+            <a href="#" class="btn btn-primary">立即聯絡 ➜</a>
+            <a href="https://line.me/ti/p/@602dlrjj" class="btn btn-line">💬 LINE ID: @602dlrjj</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
