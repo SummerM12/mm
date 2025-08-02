@@ -1,0 +1,23 @@
+/* assets/css/style.css */
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* 避免太窄時擠在一起 */
+  background-color: #fff;
+  padding: 20px 0;
+  gap: 30px; /* 每個連結之間留 30px 間距 */
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+/* 響應式調整：手機維持緊湊，桌機加大 */
+@media (min-width: 768px) {
+  .navbar a {
+    font-size: 20px;
+  }
+}
