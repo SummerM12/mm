@@ -39,12 +39,17 @@
       font-weight: bold;
     }
 
-    nav.nav {
+    .logo img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-wrapper {
       display: flex;
       gap: 2rem;
     }
 
-    nav.nav a {
+    .nav a {
       text-decoration: none;
       color: #333;
       font-weight: 500;
@@ -55,6 +60,14 @@
       padding: 0.4rem 0.8rem;
       border-radius: 8px;
       background-color: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
       cursor: pointer;
     }
 
@@ -128,21 +141,40 @@
         flex-wrap: wrap;
         padding: 1rem;
       }
-      nav.nav {
+
+      .nav-wrapper {
         flex-direction: column;
         width: 100%;
-        padding-top: 1rem;
+        display: none;
       }
+
+      .nav-wrapper.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      nav.nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 0;
+        width: 100%;
+        text-align: center;
+      }
+
       .hero h1 {
         font-size: 2rem;
       }
+
       .hero h2 {
         font-size: 1.2rem;
       }
     }
   </style>
 
-  <!-- 結構化資料（SEO） -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -170,12 +202,18 @@
         <small style="font-weight: normal;">Antelope Hardware Ltd.</small>
       </div>
     </div>
-    <nav class="nav">
-      <a href="index.html">首頁</a>
-      <a href="services.html">服務項目</a>
-      <a href="about.html">關於我們</a>
-      <a href="contact.html">聯絡我們</a>
-    </nav>
+
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+
+    <div class="nav-wrapper" id="navWrapper">
+      <nav class="nav">
+        <a href="index.html">首頁</a>
+        <a href="services.html">服務項目</a>
+        <a href="about.html">關於我們</a>
+        <a href="contact.html">聯絡我們</a>
+      </nav>
+    </div>
+
     <div class="lang-btn">🌐 EN</div>
   </header>
 
@@ -194,5 +232,12 @@
       </div>
     </section>
   </main>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navWrapper");
+      nav.classList.toggle("active");
+    }
+  </script>
 </body>
 </html>
