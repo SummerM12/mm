@@ -1,0 +1,150 @@
+<!-- contact.html 響應式頁面 -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>聯絡我們 | 林楊五金有限公司</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      margin: 0;
+      color: #1a1a1a;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+    }
+    .logo img { width: 32px; height: 32px; }
+    .nav-wrapper {
+      display: flex;
+      gap: 3rem;
+      max-width: 600px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    nav.nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    .lang-btn {
+      border: 1px solid #ccc;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    main {
+      padding-top: 100px;
+      padding: 3rem 1rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: #0b4b81;
+    }
+    .contact-item {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border-left: 4px solid #0070f3;
+      background: #f4f8ff;
+    }
+    .contact-item strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 768px) {
+      .nav-wrapper { flex-direction: column; display: none; width: 100%; }
+      .nav-wrapper.active { display: flex; }
+      nav.nav { flex-direction: column; gap: 1rem; text-align: center; }
+      .hamburger { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="https://lovable.dev/favicon-32x32.png" alt="logo" />
+      <div>
+        <div>林楊五金有限公司</div>
+        <small>Antelope Hardware Ltd.</small>
+      </div>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <div class="nav-wrapper" id="navWrapper">
+      <nav class="nav">
+        <a href="index.html">首頁</a>
+        <a href="services.html">服務項目</a>
+        <a href="about.html">關於我們</a>
+        <a href="contact.html">聯絡我們</a>
+      </nav>
+    </div>
+    <div class="lang-btn">🌐 EN</div>
+  </header>
+
+  <main>
+    <h2>聯絡我們</h2>
+
+    <div class="contact-item">
+      <strong>統一編號：</strong>
+      89156878
+    </div>
+    <div class="contact-item">
+      <strong>聯絡電話：</strong>
+      0972-138-928
+    </div>
+    <div class="contact-item">
+      <strong>電子郵件：</strong>
+      antelopehw@outlook.com
+    </div>
+    <div class="contact-item">
+      <strong>官方LINE：</strong>
+      @602dlrjj
+    </div>
+    <div class="contact-item">
+      <strong>公司地址：</strong>
+      臺中市清水區吳厝里和睦路三段250號1樓<br />
+      1 F., No. 250, Sec. 3, Hemu Rd., Wucuo Vil., Qingshui Dist., Taichung City 436043, Taiwan (R.O.C.)
+    </div>
+    <div class="contact-item">
+      <strong>辦公時間：</strong>
+      週一至週五 09:00-17:00 (GMT+8)
+    </div>
+  </main>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navWrapper");
+      nav.classList.toggle("active");
+    }
+  </script>
+</body>
+</html>
