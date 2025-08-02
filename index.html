@@ -37,7 +37,7 @@
         <img src="https://lovable.dev/favicon-32x32.png" alt="公司 Logo" class="w-8 h-8 rounded-full"/>
         <div>
           <div class="text-lg font-bold" data-zh="林楊五金有限公司" data-en="Antelope Hardware Ltd.">林楊五金有限公司</div>
-          <small class="text-sm text-gray-500 font-normal" data-zh="Antelope Hardware Ltd." data-en="Antelope Hardware Ltd.">Antelope Hardware Ltd.</small>
+          <small class="text-sm text-gray-500 font-normal" data-zh="林楊五金" data-en="Antelope Hardware Ltd.">Antelope Hardware Ltd.</small>
         </div>
       </div>
 
@@ -80,7 +80,7 @@
       // 漢堡選單的切換邏輯
       const hamburger = document.getElementById('hamburger');
       const navWrapper = document.getElementById('nav-wrapper');
-      
+
       hamburger.addEventListener('click', () => {
         navWrapper.classList.toggle('hidden');
       });
@@ -88,15 +88,16 @@
       // 語系切換的邏輯
       const langBtn = document.getElementById('lang-btn');
       const container = document.querySelector('[data-lang]');
-      const elements = document.querySelectorAll('[data-zh]');
+      // 修正選擇器，同時選取有 data-zh 和 data-en 屬性的元素
+      const elements = document.querySelectorAll('[data-zh], [data-en]');
 
       langBtn.addEventListener('click', () => {
         const currentLang = container.getAttribute('data-lang');
         const newLang = currentLang === 'zh' ? 'en' : 'zh';
-        
+
         container.setAttribute('data-lang', newLang);
         langBtn.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
-        
+
         elements.forEach(el => {
           el.textContent = el.getAttribute(`data-${newLang}`);
         });
@@ -105,7 +106,7 @@
         const titleZh = "林楊五金有限公司 | 專業船舶補給服務";
         const titleEn = "Antelope Hardware Ltd. | Professional Marine Supply Services";
         document.title = newLang === 'zh' ? titleZh : titleEn;
-        
+
       });
     });
   </script>
