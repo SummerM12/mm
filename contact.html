@@ -1,4 +1,4 @@
-<!-- contact.html 響應式頁面 -->
+<!-- contact.html 美化與功能強化版本 -->
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -11,6 +11,7 @@
       font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
       margin: 0;
       color: #1a1a1a;
+      background-color: #f8f9fb;
     }
     header {
       position: fixed;
@@ -62,24 +63,58 @@
     main {
       padding-top: 100px;
       padding: 3rem 1rem;
-      max-width: 900px;
+      max-width: 960px;
       margin: auto;
     }
     h2 {
       text-align: center;
       font-size: 2rem;
       color: #0b4b81;
+      margin-bottom: 2rem;
+    }
+    .contact-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
     }
     .contact-item {
-      margin: 1.5rem 0;
-      padding: 1rem;
-      border-left: 4px solid #0070f3;
-      background: #f4f8ff;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px dashed #ddd;
+      padding-bottom: 1rem;
+    }
+    .contact-item:last-child {
+      border-bottom: none;
     }
     .contact-item strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
+      display: inline-block;
+      font-weight: 600;
+      color: #003c70;
+      margin-bottom: 0.25rem;
+    }
+    .map-container {
+      margin-top: 2rem;
+    }
+    iframe {
+      width: 100%;
+      height: 350px;
+      border: 0;
+      border-radius: 12px;
+    }
+    .line-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background-color: #06c755;
+      color: white;
+      font-weight: bold;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .line-button:hover {
+      background-color: #05b04d;
     }
     @media (max-width: 768px) {
       .nav-wrapper { flex-direction: column; display: none; width: 100%; }
@@ -113,30 +148,33 @@
   <main>
     <h2>聯絡我們</h2>
 
-    <div class="contact-item">
-      <strong>統一編號：</strong>
-      89156878
-    </div>
-    <div class="contact-item">
-      <strong>聯絡電話：</strong>
-      0972-138-928
-    </div>
-    <div class="contact-item">
-      <strong>電子郵件：</strong>
-      antelopehw@outlook.com
-    </div>
-    <div class="contact-item">
-      <strong>官方LINE：</strong>
-      @602dlrjj
-    </div>
-    <div class="contact-item">
-      <strong>公司地址：</strong>
-      臺中市清水區吳厝里和睦路三段250號1樓<br />
-      1 F., No. 250, Sec. 3, Hemu Rd., Wucuo Vil., Qingshui Dist., Taichung City 436043, Taiwan (R.O.C.)
-    </div>
-    <div class="contact-item">
-      <strong>辦公時間：</strong>
-      週一至週五 09:00-17:00 (GMT+8)
+    <div class="contact-section">
+      <div class="contact-item">
+        <strong>統一編號：</strong> 89156878
+      </div>
+      <div class="contact-item">
+        <strong>聯絡電話：</strong> 0972-138-928
+      </div>
+      <div class="contact-item">
+        <strong>電子郵件：</strong> antelopehw@outlook.com
+      </div>
+      <div class="contact-item">
+        <strong>官方 LINE：</strong> @602dlrjj
+        <br />
+        <a class="line-button" href="https://line.me/ti/p/@602dlrjj" target="_blank">💬 加入我們的 LINE</a>
+      </div>
+      <div class="contact-item">
+        <strong>公司地址：</strong><br />
+        臺中市清水區吳厝里和睦路三段250號1樓<br />
+        1 F., No. 250, Sec. 3, Hemu Rd., Wucuo Vil., Qingshui Dist.,<br />
+        Taichung City 436043, Taiwan (R.O.C.)
+      </div>
+      <div class="contact-item">
+        <strong>辦公時間：</strong> 週一至週五 09:00-17:00 (GMT+8)
+      </div>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps?q=24.274054,120.558659&hl=zh-TW&z=16&output=embed"></iframe>
+      </div>
     </div>
   </main>
 
