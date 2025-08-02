@@ -53,7 +53,7 @@
       <!-- 導覽列與語系切換按鈕 -->
       <div id="nav-wrapper" class="hidden lg:flex lg:flex-col items-center w-full mt-4">
         <nav class="flex flex-col lg:flex-row gap-4 lg:gap-8 justify-center w-full lg:w-auto">
-          <a href="#" class="text-gray-700 hover:text-blue-600 transition duration-300 py-2 px-4 rounded-lg text-center font-medium" data-zh="首頁" data-en="Home">首頁</a>
+          <a href="index.html" class="text-gray-700 hover:text-blue-600 transition duration-300 py-2 px-4 rounded-lg text-center font-medium" data-zh="首頁" data-en="Home">首頁</a>
           <a href="services.html" class="text-gray-700 hover:text-blue-600 transition duration-300 py-2 px-4 rounded-lg text-center font-medium" data-zh="服務項目" data-en="Services">服務項目</a>
           <a href="about.html" class="text-gray-700 hover:text-blue-600 transition duration-300 py-2 px-4 rounded-lg text-center font-medium" data-zh="關於我們" data-en="About Us">關於我們</a>
           <a href="contact.html" class="text-gray-700 hover:text-blue-600 transition duration-300 py-2 px-4 rounded-lg text-center font-medium" data-zh="聯絡我們" data-en="Contact Us">聯絡我們</a>
@@ -70,12 +70,16 @@
           <h2 class="text-lg md:text-2xl text-blue-300 font-medium mb-6" data-zh="值得信賴的海上夥伴" data-en="Your Trusted Partner at Sea">值得信賴的海上夥伴</h2>
           <p class="text-base md:text-lg mb-8 leading-relaxed" data-zh="我們擁有豐富的業界經驗，曾在高雄、基隆、台中等主要商港服務多艘船舶，提供專業可靠的船舶補給服務。" data-en="With extensive industry experience, we have served numerous vessels at major commercial ports like Kaohsiung, Keelung, and Taichung, providing professional and reliable marine supply services.">我們擁有豐富的業界經驗，曾在高雄、基隆、台中等主要商港服務多艘船舶，提供專業可靠的船舶補給服務。</p>
           <div class="flex flex-col md:flex-row justify-center gap-4">
-            <a href="#" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg" data-zh="立即聯絡 ➜" data-en="Contact Us Now ➜">立即聯絡 ➜</a>
+            <a href="contact.html" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg" data-zh="立即聯絡 ➜" data-en="Contact Us Now ➜">立即聯絡 ➜</a>
             <a href="https://line.me/ti/p/@602dlrjj" target="_blank" class="inline-flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg" data-zh="💬 LINE ID: @602dlrjj" data-en="💬 LINE ID: @602dlrjj">💬 LINE ID: @602dlrjj</a>
           </div>
         </div>
       </section>
     </main>
+
+    <footer class="text-center p-8 bg-gray-100 text-gray-600">
+        <small data-zh="臺中市清水區吳厝里和睦路三段250號1樓" data-en="1F, No. 250, Sec. 3, Hemu Rd., Wucuo Li, Qingshui Dist., Taichung City">臺中市清水區吳厝里和睦路三段250號1樓</small>
+    </footer>
   </div>
 
   <script>
@@ -102,8 +106,12 @@
         container.setAttribute('data-lang', newLang);
         
         // 更新按鈕文字
-        langBtnDesktop.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
-        langBtnMobile.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
+        if(langBtnDesktop) {
+          langBtnDesktop.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
+        }
+        if(langBtnMobile) {
+          langBtnMobile.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
+        }
 
         // 翻譯所有帶有 data 屬性的元素
         elements.forEach(el => {
@@ -116,8 +124,12 @@
         document.title = newLang === 'zh' ? titleZh : titleEn;
       }
       
-      langBtnDesktop.addEventListener('click', toggleLanguage);
-      langBtnMobile.addEventListener('click', toggleLanguage);
+      if(langBtnDesktop) {
+        langBtnDesktop.addEventListener('click', toggleLanguage);
+      }
+      if(langBtnMobile) {
+        langBtnMobile.addEventListener('click', toggleLanguage);
+      }
     });
   </script>
 </body>
