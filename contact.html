@@ -75,7 +75,6 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
         <!-- 左側聯繫資訊 -->
         <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-          <div class="info-box mb-8" data-zh="提醒：送出表單後，將會開啟您的電子郵件軟體。" data-en="Note: Submitting this form will open your email client.">提醒：送出表單後，將會開啟您的電子郵件軟體。</div>
           <div class="space-y-6">
             <div>
               <strong class="block font-semibold text-lg text-blue-700" data-zh="統一編號" data-en="Tax ID">統一編號：</strong>
@@ -105,31 +104,12 @@
           </div>
         </div>
 
-        <!-- 右側聯絡表單 -->
+        <!-- 右側聯絡表單 (嵌入式) -->
         <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
-          <form id="contact-form" onsubmit="sendMail(event)" class="space-y-6">
-            <div>
-              <label for="companyName" class="block text-gray-700 font-semibold mb-2" data-zh="公司名稱" data-en="Company Name">公司名稱</label>
-              <input type="text" id="companyName" name="companyName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" required data-zh-placeholder="請輸入公司名稱" data-en-placeholder="Enter company name">
-            </div>
-            <div>
-              <label for="contactPerson" class="block text-gray-700 font-semibold mb-2" data-zh="聯絡人" data-en="Contact Person">聯絡人</label>
-              <input type="text" id="contactPerson" name="contactPerson" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" required data-zh-placeholder="請輸入聯絡人姓名" data-en-placeholder="Enter contact person's name">
-            </div>
-            <div>
-              <label for="contactPhone" class="block text-gray-700 font-semibold mb-2" data-zh="聯絡電話" data-en="Phone Number">聯絡電話</label>
-              <input type="tel" id="contactPhone" name="contactPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" required data-zh-placeholder="請輸入聯絡電話" data-en-placeholder="Enter phone number">
-            </div>
-            <div>
-              <label for="contactEmail" class="block text-gray-700 font-semibold mb-2" data-zh="聯絡信箱" data-en="Email Address">聯絡信箱</label>
-              <input type="email" id="contactEmail" name="contactEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" required data-zh-placeholder="請輸入聯絡信箱" data-en-placeholder="Enter email address">
-            </div>
-            <div>
-              <label for="inquiryItems" class="block text-gray-700 font-semibold mb-2" data-zh="詢價項目" data-en="Inquiry Items">詢價項目</label>
-              <textarea id="inquiryItems" name="inquiryItems" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-300" required data-zh-placeholder="請簡要描述您的詢價項目或需求" data-en-placeholder="Please briefly describe your inquiry items or needs"></textarea>
-            </div>
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" data-zh="送出表單" data-en="Submit">送出表單</button>
-          </form>
+          <h3 class="text-xl font-bold text-blue-700 mb-4" data-zh="聯絡表單" data-en="Contact Form">聯絡表單</h3>
+          <p class="mb-4 text-gray-700" data-zh="請填寫以下表單，我們會盡快與您聯繫。" data-en="Please fill out the form below and we will get back to you as soon as possible.">請填寫以下表單，我們會盡快與您聯繫。</p>
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeyAvDjQh1Wk3QfNDP3e01zcfVZsZtZX76hAFzF63B1wlcLIA/viewform?embedded=true" width="640" height="853" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdc2H_C9fQW3pW3uE94e8v_Q7g3fQ_H8i_8e8s/viewform?embedded=true" class="w-full h-[600px] rounded-lg" frameborder="0" marginheight="0" marginwidth="0">載入中…</iframe>
         </div>
       </div>
       
@@ -146,7 +126,7 @@
     </footer>
   </div>
 
-  <!-- JavaScript 邏輯：整合了選單切換、語系切換及表單提交功能 -->
+  <!-- JavaScript 邏輯：整合了選單切換及語系切換功能 -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // 漢堡選單的切換邏輯
@@ -182,14 +162,9 @@
 
         // 翻譯所有帶有 data 屬性的元素
         elements.forEach(el => {
-          el.textContent = el.getAttribute(`data-${newLang}`);
-        });
-
-        // 翻譯 placeholder
-        document.querySelectorAll('input, textarea').forEach(input => {
-          const newPlaceholder = input.getAttribute(`data-${newLang}-placeholder`);
-          if (newPlaceholder) {
-            input.placeholder = newPlaceholder;
+          const newText = el.getAttribute(`data-${newLang}`);
+          if (newText) {
+            el.textContent = newText;
           }
         });
 
@@ -206,22 +181,6 @@
         langBtnMobile.addEventListener('click', toggleLanguage);
       }
     });
-
-    // 表單提交邏輯
-    function sendMail(event) {
-      event.preventDefault(); // 防止表單直接提交
-      const form = document.getElementById('contact-form');
-      const companyName = encodeURIComponent(form.companyName.value);
-      const contactPerson = encodeURIComponent(form.contactPerson.value);
-      const contactPhone = encodeURIComponent(form.contactPhone.value);
-      const contactEmail = encodeURIComponent(form.contactEmail.value);
-      const inquiryItems = encodeURIComponent(form.inquiryItems.value);
-      
-      const subject = "詢價表單 - 林楊五金有限公司";
-      const body = `公司名稱: ${companyName}\n聯絡人: ${contactPerson}\n聯絡電話: ${contactPhone}\n聯絡信箱: ${contactEmail}\n\n詢價項目:\n${inquiryItems}`;
-
-      window.location.href = `mailto:antelopehw@outlook.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
   </script>
 </body>
 </html>
