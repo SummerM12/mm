@@ -36,6 +36,25 @@
       padding: 1rem;
       border-radius: 0.5rem;
     }
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 aspect ratio */
+      overflow: hidden;
+    }
+    .carousel-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
+    }
+    .carousel-image.active {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -72,33 +91,48 @@
       <h2 class="text-3xl md:text-4xl font-bold text-blue-600 mb-4 text-center" data-zh="聯絡我們" data-en="Contact Us">聯絡我們</h2>
       <p class="text-lg text-gray-700 max-w-3xl mx-auto mb-8 text-center" data-zh="期待與您合作，請隨時透過以下方式聯繫我們。" data-en="We look forward to collaborating with you. Please feel free to contact us via the following methods.">期待與您合作，請隨時透過以下方式聯繫我們。</p>
 
-      <!-- 聯絡資訊區塊 (置中排版) -->
-      <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 max-w-2xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="統一編號" data-en="Tax ID">統一編號：</strong>
-            <p class="text-gray-700">89156878</p>
+      <!-- 輪播圖片與聯絡資訊區塊 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-8">
+        <!-- 左側輪播圖片 -->
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+          <h3 class="text-xl font-bold text-blue-700 mb-4" data-zh="公司環境" data-en="Our Facilities">公司環境</h3>
+          <div class="carousel-container rounded-lg shadow-md">
+            <!-- 已經設定好的圖片 -->
+            <img class="carousel-image active rounded-lg" src="https://raw.githubusercontent.com/SummerM12/mm/refs/heads/main/image_02.png" alt="公司環境圖片 1">
+            <img class="carousel-image rounded-lg" src="https://raw.githubusercontent.com/SummerM12/mm/refs/heads/main/image_01.png" alt="公司環境圖片 2">
+            
+            <!-- 在這裡增加您新的圖片 -->
           </div>
-          <div>
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="聯絡電話" data-en="Phone">聯絡電話：</strong>
-            <p class="text-gray-700">0972-138-928</p>
-          </div>
-          <div>
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="電子郵件" data-en="Email">電子郵件：</strong>
-            <p class="text-gray-700">antelopehw@outlook.com</p>
-          </div>
-          <div>
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="官方 LINE" data-en="Official LINE">官方 LINE：</strong>
-            <p class="text-gray-700">@602dlrjj</p>
-            <a class="mt-4 inline-block bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300" href="https://line.me/ti/p/@602dlrjj" target="_blank" data-zh="💬 加入我們的 LINE" data-en="💬 Join our LINE">💬 加入我們的 LINE</a>
-          </div>
-          <div class="md:col-span-2">
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="公司地址" data-en="Address">公司地址：</strong>
-            <p class="text-gray-700" data-zh="臺中市清水區吳厝里和睦路三段250號1樓" data-en="1F, No. 250, Sec. 3, Hemu Rd., Wucuo Li, Qingshui Dist., Taichung City">臺中市清水區吳厝里和睦路三段250號1樓</p>
-          </div>
-          <div class="md:col-span-2">
-            <strong class="block font-semibold text-lg text-blue-700" data-zh="辦公時間" data-en="Office Hours">辦公時間：</strong>
-            <p class="text-gray-700" data-zh="週一至週五 09:00-17:00 (GMT+8)" data-en="Mon-Fri 09:00-17:00 (GMT+8)">週一至週五 09:00-17:00 (GMT+8)</p>
+        </div>
+
+        <!-- 右側聯絡資訊 -->
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+          <div class="space-y-6">
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="統一編號" data-en="Tax ID">統一編號：</strong>
+              <p class="text-gray-700">89156878</p>
+            </div>
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="聯絡電話" data-en="Phone">聯絡電話：</strong>
+              <p class="text-gray-700">0972-138-928</p>
+            </div>
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="電子郵件" data-en="Email">電子郵件：</strong>
+              <p class="text-gray-700">antelopehw@outlook.com</p>
+            </div>
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="官方 LINE" data-en="Official LINE">官方 LINE：</strong>
+              <p class="text-gray-700">@602dlrjj</p>
+              <a class="mt-4 inline-block bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600 transition duration-300" href="https://line.me/ti/p/@602dlrjj" target="_blank" data-zh="💬 加入我們的 LINE" data-en="💬 Join our LINE">💬 加入我們的 LINE</a>
+            </div>
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="公司地址" data-en="Address">公司地址：</strong>
+              <p class="text-gray-700" data-zh="臺中市清水區吳厝里和睦路三段250號1樓" data-en="1F, No. 250, Sec. 3, Hemu Rd., Wucuo Li, Qingshui Dist., Taichung City">臺中市清水區吳厝里和睦路三段250號1樓</p>
+            </div>
+            <div>
+              <strong class="block font-semibold text-lg text-blue-700" data-zh="辦公時間" data-en="Office Hours">辦公時間：</strong>
+              <p class="text-gray-700" data-zh="週一至週五 09:00-17:00 (GMT+8)" data-en="Mon-Fri 09:00-17:00 (GMT+8)">週一至週五 09:00-17:00 (GMT+8)</p>
+            </div>
           </div>
         </div>
       </div>
@@ -116,7 +150,7 @@
     </footer>
   </div>
 
-  <!-- JavaScript 邏輯：整合了選單切換及語系切換功能 -->
+  <!-- JavaScript 邏輯：整合了選單切換、語系切換及圖片輪播功能 -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // 漢堡選單的切換邏輯
@@ -135,14 +169,12 @@
       const container = document.querySelector('[data-lang]');
       const elements = document.querySelectorAll('[data-zh], [data-en], footer small');
 
-      // 語系切換函式
       function toggleLanguage() {
         const currentLang = container.getAttribute('data-lang');
         const newLang = currentLang === 'zh' ? 'en' : 'zh';
         
         container.setAttribute('data-lang', newLang);
         
-        // 更新按鈕文字
         if(langBtnDesktop) {
           langBtnDesktop.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
         }
@@ -150,7 +182,6 @@
           langBtnMobile.textContent = newLang === 'zh' ? '🌐 EN' : '🌐 中文';
         }
 
-        // 翻譯所有帶有 data 屬性的元素
         elements.forEach(el => {
           const newText = el.getAttribute(`data-${newLang}`);
           if (newText) {
@@ -158,7 +189,6 @@
           }
         });
 
-        // 調整 <title> 標籤的內容
         const titleZh = "聯絡我們 | 林楊五金有限公司";
         const titleEn = "Contact Us | Antelope Hardware Ltd.";
         document.title = newLang === 'zh' ? titleZh : titleEn;
@@ -169,6 +199,22 @@
       }
       if(langBtnMobile) {
         langBtnMobile.addEventListener('click', toggleLanguage);
+      }
+      
+      // 圖片輪播的邏輯
+      const carouselImages = document.querySelectorAll('.carousel-image');
+      let currentIndex = 0;
+      
+      // 顯示下一張圖片
+      function showNextImage() {
+        carouselImages[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % carouselImages.length;
+        carouselImages[currentIndex].classList.add('active');
+      }
+      
+      // 每 3 秒切換一次圖片
+      if (carouselImages.length > 1) {
+        setInterval(showNextImage, 3000);
       }
     });
   </script>
